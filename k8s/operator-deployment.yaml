@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streamlit-operator
+  namespace: streamlit
+  labels:
+    app: streamlit-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: streamlit-operator
+  template:
+    metadata:
+      labels:
+        app: streamlit-operator
+    spec:
+      serviceAccountName: streamlit-serviceaccount
+      initContainers:
+        - name: git-sync
+          image: alpine/git
+          env:
+            - name: GIT_SYNC_REPO
+              #TODO: Replace with new repo
+              value: <REPLACE_ME>
+            - name: GIT_SYNC_DEST
+              value: /tmp/repo
+            - name: GIT_SYNC_BRANCH
+              value: "main"
+            - name: CODE_DIR
+              value: "/tmp/repo/src"
+            - name: COMMIT_SHA
+              #TODO: Replace with new sha
+              value: <REPLACE_ME>
+          volumeMounts:
+            - name: git-ssh-key
+              mountPath: /etc/git-secret
+              readOnly: true
+            - name: code
+              mountPath: /tmp/code
+          command:
+            - /bin/sh
+            - -c
+            - |
+              apk update && apk add openssh-client
+              mkdir -p /root/.ssh
+              cp /etc/git-secret/ssh-privatekey /root/.ssh/id_rsa
+              chmod 600 /root/.ssh/id_rsa
+              eval "$(ssh-agent -s)"
+              ssh-add /root/.ssh/id_rsa
+              ssh-keyscan -t rsa bitbucket.org > /root/.ssh/known_hosts
+              git clone "$GIT_SYNC_REPO" "$GIT_SYNC_DEST" -b "$GIT_SYNC_BRANCH"
+              git checkout "$COMMIT_SHA"
+              cp -r "$CODE_DIR"/* /tmp/code
+
+      containers:
+      - name: streamlit-operator
+        image: python:3.8.5
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: code
+            mountPath: /app
+        command: ["./app/start.sh"]
+      volumes:
+        - name: code
+          emptyDir: { }
+        - name: git-ssh-key
+          secret:
+            secretName: fetchlit-key
