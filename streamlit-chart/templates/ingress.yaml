@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name }}
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: 'ip'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    #TODO: Handle this stuff in the templating or maybe a config map?
+    alb.ingress.kubernetes.io/inbound-cidrs: {{ .Values.ingress.inboundCidrs }}
+    external-dns.alpha.kubernetes.io/hostname: "{{ .Values.ingress.subdomain }}-streamlit.{{ .Values.ingress.nameValue }}"
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certificateArn }}
+  namespace: streamlit
+spec:
+  ingressClassName: alb
+  rules:
+    - host: "{{ .Values.ingress.nameValue }}-streamlit.{{ .Values.ingress.nameValue }}"
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Values.ingress.name }}
+                port:
+                  number: 80

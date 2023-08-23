@@ -1,0 +1,23 @@
+deployment:
+#   replicaCount: 3
+  name: my-deployment
+  image:
+    app: "" #updated url
+    version: latest
+  
+service:
+  name: my-service
+
+
+ingress:
+  name: my-ingress-name
+  subdomain: my-subdomain
+  certificateArn: my-certificate-arn
+  inboundCidrs: 10.0.0.0/16 # Replace with your desired CIDR range
+
+
+
+# codeInfo:
+#   repo: git@github.com:MyOrg/my-app.git
+#   branch: master
+#   code_dir: my-app
