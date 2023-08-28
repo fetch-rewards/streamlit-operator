@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  streamlit-chart:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-08-28T14:54:01.902253-04:00"
+    description: A Helm chart for Kubernetes
+    digest: 5c17be2cbea0768bb6c67308e2db39385ead2a5e37591e745867a959efe35bc4
+    name: streamlit-chart
+    type: application
+    urls:
+    - streamlit-chart-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-08-28T14:54:01.902036-04:00"
