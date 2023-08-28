@@ -1,5 +1,5 @@
 #!/bin/sh
 
 
-pip install -r ./app/requirements.txt
-python -m kopf run ./app/main.py
+pip install -r ./src/requirements.txt
+python -m kopf run ./src/main.py
