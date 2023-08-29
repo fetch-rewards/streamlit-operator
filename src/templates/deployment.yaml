@@ -52,36 +52,36 @@ spec:
             - name: ENTRYPOINT
               value: "main.py"
             #TODO: We probably want to make some of these secrets opt-in, AFAIK the app won't work if they're not defined
-            - name: SNOWFLAKE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: snowflake-credentials
-                  key: snowflake-user
-            - name: SNOWFLAKE_PASSWORD
-              valueFrom:
-                  secretKeyRef:
-                    name: snowflake-credentials
-                    key: snowflake-password
-            - name: PYPI_USER
-              valueFrom:
-                  secretKeyRef:
-                    name: pypi-credentials
-                    key: pypi-user
-            - name: PYPI_PASSWORD
-              valueFrom:
-                  secretKeyRef:
-                      name: pypi-credentials
-                      key: pypi-password
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                  secretKeyRef:
-                    name: aws-credentials
-                    key: aws-access-key-id
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                  secretKeyRef:
-                      name: aws-credentials
-                      key: aws-secret-access-key
+#            - name: SNOWFLAKE_USER
+#              valueFrom:
+#                secretKeyRef:
+#                  name: snowflake-credentials
+#                  key: snowflake-user
+#            - name: SNOWFLAKE_PASSWORD
+#              valueFrom:
+#                  secretKeyRef:
+#                    name: snowflake-credentials
+#                    key: snowflake-password
+#            - name: PYPI_USER
+#              valueFrom:
+#                  secretKeyRef:
+#                    name: pypi-credentials
+#                    key: pypi-user
+#            - name: PYPI_PASSWORD
+#              valueFrom:
+#                  secretKeyRef:
+#                      name: pypi-credentials
+#                      key: pypi-password
+#            - name: AWS_ACCESS_KEY_ID
+#              valueFrom:
+#                  secretKeyRef:
+#                    name: aws-credentials
+#                    key: aws-access-key-id
+#            - name: AWS_SECRET_ACCESS_KEY
+#              valueFrom:
+#                  secretKeyRef:
+#                      name: aws-credentials
+#                      key: aws-secret-access-key
         command:
           - "/app/launch/launch.sh"
         ports:
@@ -98,6 +98,6 @@ spec:
           configMap:
             name: streamlit-launch-script
             defaultMode: 0500
-        - name: git-ssh-key
-          secret:
-            secretName: fetchlit-key
+#        - name: git-ssh-key
+#          secret:
+#            secretName: fetchlit-key

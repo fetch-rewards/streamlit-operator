@@ -24,8 +24,6 @@ spec:
               value: https://github.com/fetch-rewards/streamlit-operator.git
             - name: GIT_SYNC_BRANCH
               value: feature/docker
-            - name: COMMIT_SHA
-              value: 2138e2c
             - name: GIT_SYNC_ROOT
               value: /tmp/code
             - name: GIT_SYNC_DEST
