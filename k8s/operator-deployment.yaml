@@ -23,7 +23,7 @@ spec:
             - name: GIT_SYNC_REPO
               value: https://github.com/fetch-rewards/streamlit-operator.git
             - name: GIT_SYNC_BRANCH
-              value: main
+              value: feature/docker
             - name: COMMIT_SHA
               value: 2138e2c
             - name: GIT_SYNC_ROOT

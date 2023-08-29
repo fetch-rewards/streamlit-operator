@@ -12,8 +12,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip3 install streamlit
 
-ADD launch.sh /launch/launch.sh
-
 EXPOSE 80
 
 HEALTHCHECK CMD curl --fail http://localhost:80/_stcore/health

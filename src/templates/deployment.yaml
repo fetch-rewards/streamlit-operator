@@ -43,7 +43,7 @@ spec:
             value: "60"
       - name: streamlit
 #        TODO: Replace with new image
-        image: <REPLACE_ME>
+        image: python:3.9-slim
         env:
             - name: IN_HUB
               value: "True"
@@ -82,15 +82,22 @@ spec:
                   secretKeyRef:
                       name: aws-credentials
                       key: aws-secret-access-key
-
+        command:
+          - "/app/launch/launch.sh"
         ports:
         - containerPort: 80
         volumeMounts:
           - name: code
             mountPath: /app
+          - name: launch
+            mountPath: /app/launch
       volumes:
         - name: code
           emptyDir: {{ }}
+        - name: launch
+          configMap:
+            name: streamlit-launch-script
+            defaultMode: 0500
         - name: git-ssh-key
           secret:
             secretName: fetchlit-key
