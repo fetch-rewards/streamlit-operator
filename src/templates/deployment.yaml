@@ -22,8 +22,6 @@ spec:
         volumeMounts:
           - name: code
             mountPath: /tmp/code
-          - name: git-ssh-key
-            mountPath: /etc/git-secret
         env:
           - name: GIT_SYNC_REPO
             value: "{repo}"
