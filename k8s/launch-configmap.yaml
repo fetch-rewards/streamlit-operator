@@ -6,16 +6,18 @@ metadata:
 data:
   launch.sh: |
     #!/bin/bash
+    apt-get update && apt-get install -y inotify-tools
+
     pip install streamlit==1.26.0
 
-    git config --global --add safe.directory /app
-    echo "CHECKING GIT STATUS"
-    git status
-    echo "END CHECKING GIT STATUS"
-    echo "RUNNING LS"
-    ls
-    echo "END RUNNING LS"
-    
+    #    git config --global --add safe.directory /app
+    #    echo "CHECKING GIT STATUS"
+    #    git status
+    #    echo "END CHECKING GIT STATUS"
+    #    echo "RUNNING LS"
+    #    ls
+    #    echo "END RUNNING LS"
+    #
     # Check if the requirements file has been cloned yet, if not sleep for 5 seconds and try again
     while [ ! -f /app/$CODE_DIR/$ENTRYPOINT ]
     do
