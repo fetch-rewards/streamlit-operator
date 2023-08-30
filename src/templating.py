@@ -106,7 +106,7 @@ def template_service(name):
     return service_dict
 
 
-def template_ingress(name, base_dns_path):
+def template_ingress(name, base_dns_path, ingress_annotations):
     dns_name = f"{name}-streamlit.{base_dns_path}"
     ingress_dict = {
         "apiVersion": "networking.k8s.io/v1",
@@ -120,8 +120,7 @@ def template_ingress(name, base_dns_path):
                 "alb.ingress.kubernetes.io/ssl-redirect": "443",
                 "external-dns.alpha.kubernetes.io/hostname": dns_name,
                 # TODO: Allow users to pass through these annotations from the chart level
-                # "alb.ingress.kubernetes.io/inbound-cidrs": "<REPLACE ME>",
-                # "alb.ingress.kubernetes.io/certificate-arn": "<FIGURE OUT IF THIS IS NEEDED>"
+                **ingress_annotations
             },
             "namespace": "streamlit"
         },

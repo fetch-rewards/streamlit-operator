@@ -2,7 +2,12 @@ import kopf
 import kubernetes
 
 from src.templating import template_deployment, template_service, template_ingress
+import os
+import yaml
 
+config = yaml.safe_load(open("/config/config.yaml"))
+print("Loaded config:")
+print(config)
 
 @kopf.on.create('streamlit-apps')
 def create_fn(spec, name, namespace, logger, **kwargs):
@@ -30,7 +35,7 @@ def create_fn(spec, name, namespace, logger, **kwargs):
     kopf.adopt(service_data)
 
     # Template the ingress
-    ingress_data = template_ingress(name)
+    ingress_data = template_ingress(name, config["baseDnsRecord"], config["ingressAnnotations"])
     kopf.adopt(ingress_data)
 
     api = kubernetes.client.CoreV1Api()
