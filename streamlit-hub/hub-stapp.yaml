@@ -2,6 +2,7 @@ apiVersion: fetch.com/v1
 kind: StreamlitApp
 metadata:
   name: hub
+  namespace: streamlit
 spec:
   repo: https://github.com/fetch-rewards/streamlit-operator.git
   branch: main
