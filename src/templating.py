@@ -119,7 +119,6 @@ def template_ingress(name, base_dns_path, ingress_annotations):
                 "alb.ingress.kubernetes.io/listen-ports": '[{"HTTP": 80}, {"HTTPS":443}]',
                 "alb.ingress.kubernetes.io/ssl-redirect": "443",
                 "external-dns.alpha.kubernetes.io/hostname": dns_name,
-                # TODO: Allow users to pass through these annotations from the chart level
                 **ingress_annotations
             },
             "namespace": "streamlit"
