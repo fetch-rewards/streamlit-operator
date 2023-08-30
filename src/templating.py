@@ -4,26 +4,106 @@ import yaml
 
 
 def template_deployment(name, repo, branch, code_dir):
-    path = os.path.join(os.path.dirname(__file__), "templates", 'deployment.yaml')
-    tmpl = open(path, 'rt').read()
-    deployment_text = tmpl.format(
-        name=name,
-        repo=repo,
-        branch=branch,
-        code_dir=code_dir
-    )
-    deployment_data = yaml.safe_load(deployment_text)
-    return deployment_data
+    deployment_dict = {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+            "name": f"{name}",
+            "namespace": "streamlit",
+            "labels": {
+                "app": f"{name}"
+            }
+        },
+        "spec": {
+            "replicas": 1,
+            "selector": {
+                "matchLabels": {
+                    "app": f"{name}"
+                }
+            },
+            "template": {
+                "metadata": {
+                    "labels": {
+                        "app": f"{name}"
+                    }
+                },
+                "spec": {
+                    "serviceAccountName": "streamlit-serviceaccount",
+                    "containers": [
+                        {
+                            "name": "git-sync",
+                            "image": "registry.k8s.io/git-sync:v3.1.3",
+                            "volumeMounts": [
+                                {
+                                    "name": "code",
+                                    "mountPath": "/tmp/code"
+                                }
+                            ],
+                            "env": [
+                                {"name": "GIT_SYNC_REPO", "value": f"{repo}"},
+                                {"name": "GIT_SYNC_BRANCH", "value": f"{branch}"},
+                                {"name": "GIT_SYNC_ROOT", "value": "/tmp/code"},
+                                {"name": "GIT_SYNC_DEST", "value": "repo"},
+                                {"name": "GIT_KNOWN_HOSTS", "value": "false"},
+                                {"name": "GIT_SYNC_WAIT", "value": "60"}
+                            ]
+                        },
+                        {
+                            "name": "streamlit",
+                            "image": "python:3.9-slim",
+                            "env": [
+                                {"name": "IN_HUB", "value": "True"},
+                                {"name": "CODE_DIR", "value": f"repo/{code_dir}"},
+                                {"name": "ENTRYPOINT", "value": "main.py"}
+                            ],
+                            "command": ["/app/launch/launch.sh"],
+                            "ports": [{"containerPort": 80}],
+                            "volumeMounts": [
+                                {"name": "code", "mountPath": "/app"},
+                                {"name": "launch", "mountPath": "/app/launch"}
+                            ]
+                        }
+                    ],
+                    "volumes": [
+                        {"name": "code", "emptyDir": {}},
+                        {
+                            "name": "launch",
+                            "configMap": {
+                                "name": "streamlit-launch-script",
+                                "defaultMode": "0500"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    return deployment_dict
 
 
 def template_service(name):
-    path = os.path.join(os.path.dirname(__file__), "templates", 'service.yaml')
-    tmpl = open(path, 'rt').read()
-    service_text = tmpl.format(
-        name=name,
-    )
-    service_data = yaml.safe_load(service_text)
-    return service_data
+    service_dict = {
+        "apiVersion": "v1",
+        "kind": "Service",
+        "metadata": {
+            "name": f"{name}",
+            "namespace": "streamlit"
+        },
+        "spec": {
+            "ports": [
+                {
+                    "port": 80,
+                    "targetPort": 80,
+                    "protocol": "TCP"
+                }
+            ],
+            "type": "NodePort",
+            "selector": {
+                "app": f"{name}"
+            }
+        }
+    }
+    return service_dict
 
 
 def template_ingress(name, base_dns_path):
