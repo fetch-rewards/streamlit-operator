@@ -4,6 +4,7 @@ import kubernetes
 from src.templating import template_deployment, template_service, template_ingress
 import os
 import yaml
+import logging
 
 
 global config
@@ -12,8 +13,8 @@ global config
 def configure(settings: kopf.OperatorSettings, **_):
     global config
     config = yaml.safe_load(open("/config/config.yaml"))
-    print("Loaded config:")
-    print(config)
+    logging.info(f"Loaded config: {config}")
+
 
 
 @kopf.on.create('streamlit-apps')
