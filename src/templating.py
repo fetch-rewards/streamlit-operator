@@ -70,7 +70,7 @@ def template_deployment(name, repo, branch, code_dir):
                             "name": "launch",
                             "configMap": {
                                 "name": "streamlit-launch-script",
-                                "defaultMode": "0500"
+                                "defaultMode": 0o500
                             }
                         }
                     ]
