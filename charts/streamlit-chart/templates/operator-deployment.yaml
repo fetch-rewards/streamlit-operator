@@ -23,7 +23,7 @@ spec:
             - name: GIT_SYNC_REPO
               value: https://github.com/fetch-rewards/streamlit-operator.git
             - name: GIT_SYNC_BRANCH
-              value: feature/docker
+              value: feature/migrate-k8s-to-helm
             - name: GIT_SYNC_ROOT
               value: /tmp/code
             - name: GIT_SYNC_DEST
@@ -36,6 +36,9 @@ spec:
       containers:
       - name: streamlit-operator
         image: python:3.8.5
+        env:
+          - name: BASE_DNS_RECORD
+            value: "test.com"
         ports:
         - containerPort: 80
         volumeMounts:
