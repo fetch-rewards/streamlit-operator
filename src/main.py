@@ -39,6 +39,9 @@ def template_ingress(name):
 
 @kopf.on.create('streamlit-apps')
 def create_fn(spec, name, namespace, logger, **kwargs):
+    # Override the namespace, since the operator won't have permissions to create the apps anywhere else anyway
+    namespace = "streamlit"
+
     # Get params from spec
     repo = spec.get('repo', None)
     branch = spec.get('branch', None)
