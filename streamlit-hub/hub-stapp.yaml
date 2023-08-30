@@ -3,6 +3,6 @@ kind: StreamlitApp
 metadata:
   name: hub
 spec:
-  repo: git@github.com:fetch-rewards/streamlit-operator.git
+  repo: https://github.com/fetch-rewards/streamlit-operator.git
   branch: main
   code_dir: streamlit-hub

@@ -31,10 +31,6 @@ spec:
             value: /tmp/code
           - name: GIT_SYNC_DEST
             value: "repo"
-          - name: GIT_SYNC_SSH
-            value: "true"
-          - name: GIT_SSH_KEY_FILE
-            value: /etc/git-secret/ssh-privatekey
           - name: GIT_KNOWN_HOSTS
             value: "false"
           - name: GIT_SYNC_WAIT
