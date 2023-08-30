@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: streamlit-operator-config
+  namespace: streamlit
+data:
+  config.yaml: |
+    baseDnsRecord: {{ .Values.baseDnsRecord }}
+    ingressAnnotations:
+      {{- range $key, $value := .Values.ingressAnnotations }}
+      {{ $key }} : {{ tpl $value $ }}
+      {{- end }}

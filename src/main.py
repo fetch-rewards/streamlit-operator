@@ -1,40 +1,20 @@
-import os
 import kopf
 import kubernetes
+
+from src.templating import template_deployment, template_service, template_ingress
+import os
 import yaml
+import logging
 
 
-def template_deployment(name, repo, branch, code_dir):
-    path = os.path.join(os.path.dirname(__file__), "templates", 'deployment.yaml')
-    tmpl = open(path, 'rt').read()
-    deployment_text = tmpl.format(
-        name=name,
-        repo=repo,
-        branch=branch,
-        code_dir=code_dir
-    )
-    deployment_data = yaml.safe_load(deployment_text)
-    return deployment_data
+global config
 
+@kopf.on.startup()
+def configure(settings: kopf.OperatorSettings, **_):
+    global config
+    config = yaml.safe_load(open("/config/config.yaml"))
+    logging.info(f"Loaded config: {config}")
 
-def template_service(name):
-    path = os.path.join(os.path.dirname(__file__), "templates", 'service.yaml')
-    tmpl = open(path, 'rt').read()
-    service_text = tmpl.format(
-        name=name,
-    )
-    service_data = yaml.safe_load(service_text)
-    return service_data
-
-
-def template_ingress(name):
-    path = os.path.join(os.path.dirname(__file__), "templates", 'ingress.yaml')
-    tmpl = open(path, 'rt').read()
-    ingress_text = tmpl.format(
-        name=name,
-    )
-    ingress_data = yaml.safe_load(ingress_text)
-    return ingress_data
 
 
 @kopf.on.create('streamlit-apps')
@@ -63,7 +43,7 @@ def create_fn(spec, name, namespace, logger, **kwargs):
     kopf.adopt(service_data)
 
     # Template the ingress
-    ingress_data = template_ingress(name)
+    ingress_data = template_ingress(name, config["baseDnsRecord"], config["ingressAnnotations"])
     kopf.adopt(ingress_data)
 
     api = kubernetes.client.CoreV1Api()

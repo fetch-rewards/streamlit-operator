@@ -23,7 +23,7 @@ spec:
             - name: GIT_SYNC_REPO
               value: https://github.com/fetch-rewards/streamlit-operator.git
             - name: GIT_SYNC_BRANCH
-              value: feature/docker
+              value: feature/configurable-helm-chart
             - name: GIT_SYNC_ROOT
               value: /tmp/code
             - name: GIT_SYNC_DEST
@@ -36,13 +36,25 @@ spec:
       containers:
       - name: streamlit-operator
         image: python:3.8.5
+        env:
+          - name: BASE_DNS_RECORD
+            value: {{ required "Must provide a base dns to host your Streamlit apps" .Values.baseDnsRecord }}
         ports:
         - containerPort: 80
         volumeMounts:
           - name: code
             mountPath: /app
+          - name: config
+            mountPath: "/config"
+            readOnly: true
         workingDir: /app/repo/
         command: ["/app/repo/src/start.sh"]
       volumes:
         - name: code
           emptyDir: { }
+        - name: config
+          configMap:
+            name: streamlit-operator-config
+            items:
+              - key: config.yaml
+                path: config.yaml
