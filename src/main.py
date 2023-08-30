@@ -5,9 +5,16 @@ from src.templating import template_deployment, template_service, template_ingre
 import os
 import yaml
 
-config = yaml.safe_load(open("/config/config.yaml"))
-print("Loaded config:")
-print(config)
+
+global config
+
+@kopf.on.startup()
+def configure(settings: kopf.OperatorSettings, **_):
+    global config
+    config = yaml.safe_load(open("/config/config.yaml"))
+    print("Loaded config:")
+    print(config)
+
 
 @kopf.on.create('streamlit-apps')
 def create_fn(spec, name, namespace, logger, **kwargs):
