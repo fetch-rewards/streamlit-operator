@@ -22,8 +22,6 @@ spec:
         volumeMounts:
           - name: code
             mountPath: /tmp/code
-          - name: git-ssh-key
-            mountPath: /etc/git-secret
         env:
           - name: GIT_SYNC_REPO
             value: "{repo}"
@@ -33,17 +31,12 @@ spec:
             value: /tmp/code
           - name: GIT_SYNC_DEST
             value: "repo"
-          - name: GIT_SYNC_SSH
-            value: "true"
-          - name: GIT_SSH_KEY_FILE
-            value: /etc/git-secret/ssh-privatekey
           - name: GIT_KNOWN_HOSTS
             value: "false"
           - name: GIT_SYNC_WAIT
             value: "60"
       - name: streamlit
-#        TODO: Replace with new image
-        image: <REPLACE_ME>
+        image: python:3.9-slim
         env:
             - name: IN_HUB
               value: "True"
@@ -51,46 +44,19 @@ spec:
               value: "repo/{code_dir}"
             - name: ENTRYPOINT
               value: "main.py"
-            #TODO: We probably want to make some of these secrets opt-in, AFAIK the app won't work if they're not defined
-            - name: SNOWFLAKE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: snowflake-credentials
-                  key: snowflake-user
-            - name: SNOWFLAKE_PASSWORD
-              valueFrom:
-                  secretKeyRef:
-                    name: snowflake-credentials
-                    key: snowflake-password
-            - name: PYPI_USER
-              valueFrom:
-                  secretKeyRef:
-                    name: pypi-credentials
-                    key: pypi-user
-            - name: PYPI_PASSWORD
-              valueFrom:
-                  secretKeyRef:
-                      name: pypi-credentials
-                      key: pypi-password
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                  secretKeyRef:
-                    name: aws-credentials
-                    key: aws-access-key-id
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                  secretKeyRef:
-                      name: aws-credentials
-                      key: aws-secret-access-key
-
+        command:
+          - "/app/launch/launch.sh"
         ports:
         - containerPort: 80
         volumeMounts:
           - name: code
             mountPath: /app
+          - name: launch
+            mountPath: /app/launch
       volumes:
         - name: code
           emptyDir: {{ }}
-        - name: git-ssh-key
-          secret:
-            secretName: fetchlit-key
+        - name: launch
+          configMap:
+            name: streamlit-launch-script
+            defaultMode: 0500

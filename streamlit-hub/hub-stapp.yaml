@@ -1,0 +1,8 @@
+apiVersion: fetch.com/v1
+kind: StreamlitApp
+metadata:
+  name: hub
+spec:
+  repo: https://github.com/fetch-rewards/streamlit-operator.git
+  branch: main
+  code_dir: streamlit-hub
