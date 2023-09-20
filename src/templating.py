@@ -106,8 +106,8 @@ def template_service(name):
     return service_dict
 
 
-def template_ingress(name, base_dns_path, ingress_annotations):
-    dns_name = f"{name}-streamlit.{base_dns_path}"
+def template_ingress(name, base_dns_path, ingress_annotations, suffix):
+    dns_name = f"{name}{suffix}.{base_dns_path}"
     ingress_dict = {
         "apiVersion": "networking.k8s.io/v1",
         "kind": "Ingress",
