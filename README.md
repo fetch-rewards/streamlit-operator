@@ -6,14 +6,32 @@ With a minimal amount of config for each app, it handles deployment, plus ingres
 It will also install a "Streamlit Hub" app in your cluster, that allows you to view all running apps as well as launch
 new apps from the UI.
 
-## Installation
-
-Details to come
-
 ## Prerequisites
 
 This app has been developed under the assumption that you're running a cluster on EKS in AWS. It will likely work on other clusters
 with minimal changes, but this has not been tested.
+
+## Installation
+
+The Streamlit Operator comes prepackaged as a Helm chart.  If you've never used helm, please refer to
+Helm's [documentation](https://helm.sh/docs) to get started.
+
+Once Helm has been set up correctly, add the repo as follows:
+
+    helm repo add streamlit-operator https://fetch-rewards.github.io/streamlit-operator/
+
+If you had already added this repo earlier, run `helm repo update` to retrieve
+the latest versions of the packages.  You can then run `helm search repo
+<alias>` to see the charts.
+
+To install the chart run:
+
+    helm install streamlit-operator streamlit-operator/streamlit-chart --set baseDnsRecord=<YOUR-COMPANY>.com
+
+To uninstall the chart:
+
+    helm delete streamlit-operator
+
 
 ## Usage
 
@@ -30,26 +48,3 @@ Currently users must specify four pieces of config:
 ## Architecture
 
 ![Architecture](docs/imgs/architecture.png)
-
-
-
-## Helm Usage
-
-[Helm](https://helm.sh) must be installed to use the charts.  Please refer to
-Helm's [documentation](https://helm.sh/docs) to get started.
-
-Once Helm has been set up correctly, add the repo as follows:
-
-    helm repo add streamlit-operator https://fetch-rewards.github.io/streamlit-operator/
-
-If you had already added this repo earlier, run `helm repo update` to retrieve
-the latest versions of the packages.  You can then run `helm search repo
-<alias>` to see the charts.
-
-To install the <chart-name> chart:
-
-    helm install streamlit-operator streamlit-operator/streamlit-chart --set baseDnsRecord=<YOUR-COMPANY>.com
-
-To uninstall the chart:
-
-    helm delete streamlit-operator
