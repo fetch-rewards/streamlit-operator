@@ -6,6 +6,7 @@ metadata:
 data:
   config.yaml: |
     baseDnsRecord: {{ .Values.baseDnsRecord }}
+    suffix: {{ .Values.suffix }}
     ingressAnnotations:
       {{- range $key, $value := .Values.ingressAnnotations }}
       {{ $key }} : {{ tpl $value $ }}
