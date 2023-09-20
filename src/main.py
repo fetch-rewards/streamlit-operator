@@ -43,7 +43,7 @@ def create_fn(spec, name, namespace, logger, **kwargs):
     kopf.adopt(service_data)
 
     # Template the ingress
-    ingress_data = template_ingress(name, config["baseDnsRecord"], config["ingressAnnotations"])
+    ingress_data = template_ingress(name, config["baseDnsRecord"], config["ingressAnnotations"], config["suffix"])
     kopf.adopt(ingress_data)
 
     api = kubernetes.client.CoreV1Api()
