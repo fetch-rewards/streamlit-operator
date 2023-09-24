@@ -3,6 +3,16 @@ entries:
   streamlit-chart:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-09-24T21:39:00.985953704Z"
+    description: A Helm chart for Kubernetes
+    digest: b4af164b9c9ee27ed13421ac51a01a1ac637c2ec3e3790e4370dba01e456ba3e
+    name: streamlit-chart
+    type: application
+    urls:
+    - https://github.com/fetch-rewards/streamlit-operator/releases/download/streamlit-chart-0.4.0/streamlit-chart-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-09-20T17:25:57.941831167Z"
     description: A Helm chart for Kubernetes
     digest: ea81f21593124ddb4ac2cb80532a0ab287cda780cd98dc987df38b13025903df
@@ -31,4 +41,4 @@ entries:
     urls:
     - https://github.com/fetch-rewards/streamlit-operator/releases/download/streamlit-chart-0.1.0/streamlit-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-20T17:25:57.941857468Z"
+generated: "2023-09-24T21:39:00.985970004Z"
