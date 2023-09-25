@@ -13,7 +13,7 @@ def configure(settings: kopf.OperatorSettings, **_):
     global config
     config = yaml.safe_load(open("/config/config.yaml"))
     logging.info(f"Loaded config: {config}")
-
+    login = kubernetes.config.load_incluster_config()
     client = kubernetes.client.CustomObjectsApi()
 
     client.create_namespaced_custom_object(
