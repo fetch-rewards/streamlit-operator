@@ -44,7 +44,7 @@ rules:
   # Application: watching & handling for the custom resource we declare.
   - apiGroups: [fetch.com]
     resources: [streamlit-apps]
-    verbs: [list, watch, patch]
+    verbs: [list, watch, patch, create, update, delete]
 
   # Application: other resources it produces and manipulates.
   # Here, we create Jobs+PVCs+Pods, but we do not patch/update/delete them ever.
