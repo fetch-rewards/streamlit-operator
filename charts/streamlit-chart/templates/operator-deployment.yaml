@@ -23,7 +23,7 @@ spec:
             - name: GIT_SYNC_REPO
               value: https://github.com/fetch-rewards/streamlit-operator.git
             - name: GIT_SYNC_BRANCH
-              value: feature/configurable-helm-chart
+              value: main
             - name: GIT_SYNC_ROOT
               value: /tmp/code
             - name: GIT_SYNC_DEST
