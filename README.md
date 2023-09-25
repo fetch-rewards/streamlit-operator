@@ -1,10 +1,8 @@
 # Streamlit Operator
 
-The Kubernetes Streamlit operator enables you deploy easily deploy your apps and keep them up in sync with your code.
-With a minimal amount of config for each app, it handles deployment, plus ingress and DNS. 
-
-It will also install a "Streamlit Hub" app in your cluster, that allows you to view all running apps as well as launch
-new apps from the UI.
+Streamlit apps are easy to develop, but can be a pain to deploy and keep up to date. The Streamlit Operator makes deploying a streamlit
+app as easy as filling out a few fields in a web UI. Plus, it will keep your app up to date with your code via a continuous git sync, so you can focus on building.
+If you're already using Kubernetes, this is the easiest way to deploy your apps.
 
 ## Prerequisites
 
@@ -32,6 +30,8 @@ To uninstall the chart:
 
     helm delete streamlit-operator
 
+After installation, you should have an operator running in a newly created streamlit namespace, as well as a hub app
+running at `hub-streamlit.<YOUR-COMPANY>.com`. 
 
 ## Usage
 
