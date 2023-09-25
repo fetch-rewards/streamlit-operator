@@ -2,7 +2,6 @@ import kopf
 import kubernetes
 
 from src.templating import template_deployment, template_service, template_ingress
-import os
 import yaml
 import logging
 
@@ -15,6 +14,27 @@ def configure(settings: kopf.OperatorSettings, **_):
     config = yaml.safe_load(open("/config/config.yaml"))
     logging.info(f"Loaded config: {config}")
 
+    client = kubernetes.client.CustomObjectsApi()
+
+    client.create_namespaced_custom_object(
+        group="fetch.com",
+        version="v1",
+        namespace="streamlit",
+        plural="streamlit-apps",
+        body={
+            "apiVersion": "fetch.com/v1",
+            "kind": "StreamlitApp",
+            "metadata": {
+                "name": "hub",
+                "namespace": "streamlit",
+            },
+            "spec": {
+                "repo": "https://github.com/fetch-rewards/streamlit-operator.git",
+                "branch": "main",
+                "code_dir": "streamlit-hub",
+            },
+        },
+    )
 
 
 @kopf.on.create('streamlit-apps')
