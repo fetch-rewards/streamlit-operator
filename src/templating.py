@@ -97,7 +97,7 @@ def template_service(name):
                     "protocol": "TCP"
                 }
             ],
-            "type": "NodePort",
+            "type": "ClusterIP",
             "selector": {
                 "app": f"{name}"
             }
@@ -115,25 +115,24 @@ def template_ingress(name, base_dns_path, ingress_annotations, suffix):
         "metadata": {
             "name": f"{name}",
             "annotations": {
-                "alb.ingress.kubernetes.io/scheme": "internal",
-                "alb.ingress.kubernetes.io/target-type": "ip",
-                "alb.ingress.kubernetes.io/listen-ports": '[{"HTTP": 80}, {"HTTPS":443}]',
-                "alb.ingress.kubernetes.io/ssl-redirect": "443",
-                "external-dns.alpha.kubernetes.io/hostname": dns_name,
+                "nginx.ingress.kubernetes.io/proxy-read-timeout": "3600",
+                "nginx.ingress.kubernetes.io/proxy-send-timeout": "3600",
+                "nginx.ingress.kubernetes.io/proxy-http-version": "1.1",
+                "nginx.ingress.kubernetes.io/upstream-hash-by": "$arg_session_id",
                 **ingress_annotations
             },
             "namespace": "streamlit"
         },
         "spec": {
-            "ingressClassName": "alb",
+            "ingressClassName": "nginx",
             "rules": [
                 {
                     "host": dns_name,
                     "http": {
                         "paths": [
                             {
-                                "path": "/*",
-                                "pathType": "ImplementationSpecific",
+                                "path": "/",
+                                "pathType": "Prefix",
                                 "backend": {
                                     "service": {
                                         "name": f"{name}",
