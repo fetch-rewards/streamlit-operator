@@ -8,6 +8,8 @@ data:
     #!/bin/bash
     apt-get update && apt-get install -y inotify-tools
 
+    pip install streamlit==1.26.0
+
     while [ ! -f /app/$CODE_DIR/$ENTRYPOINT ]
     do
         echo "ENTRYPOINT NOT FOUND, SLEEPING FOR 5 SECONDS"
@@ -22,7 +24,7 @@ data:
     while true; do
       cd /app/$CODE_DIR
     
-      python /app/$CODE_DIR/$ENTRYPOINT &
+      streamlit run /app/$CODE_DIR/$ENTRYPOINT --server.port=80 --server.address=0.0.0.0 --server.fileWatcherType=none &
       SERVER_PID=$!
     
       inotifywait -r -e modify,create,delete,move $DIR_TO_WATCH
