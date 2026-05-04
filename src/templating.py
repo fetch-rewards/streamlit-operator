@@ -120,7 +120,6 @@ def template_ingress(name, base_dns_path, ingress_annotations, suffix):
                 "nginx.ingress.kubernetes.io/proxy-http-version": "1.1",
                 "nginx.ingress.kubernetes.io/upstream-hash-by": "$arg_session_id",
                 "nginx.ingress.kubernetes.io/websocket-services": f"{name}",
-                "nginx.ingress.kubernetes.io/configuration-snippet": "proxy_set_header Upgrade $http_upgrade;\nproxy_set_header Connection \"upgrade\";\n",
                 **ingress_annotations
             },
             "namespace": "streamlit"
