@@ -16,25 +16,31 @@ def configure(settings: kopf.OperatorSettings, **_):
     login = kubernetes.config.load_incluster_config()
     client = kubernetes.client.CustomObjectsApi()
 
-    client.create_namespaced_custom_object(
-        group="fetch.com",
-        version="v1",
-        namespace="streamlit",
-        plural="streamlit-apps",
-        body={
-            "apiVersion": "fetch.com/v1",
-            "kind": "StreamlitApp",
-            "metadata": {
-                "name": "hub",
-                "namespace": "streamlit",
+    try:
+        client.create_namespaced_custom_object(
+            group="fetch.com",
+            version="v1",
+            namespace="streamlit",
+            plural="streamlit-apps",
+            body={
+                "apiVersion": "fetch.com/v1",
+                "kind": "StreamlitApp",
+                "metadata": {
+                    "name": "hub",
+                    "namespace": "streamlit",
+                },
+                "spec": {
+                    "repo": "https://github.com/fetch-rewards/streamlit-operator.git",
+                    "branch": "main",
+                    "code_dir": "streamlit-hub",
+                },
             },
-            "spec": {
-                "repo": "https://github.com/fetch-rewards/streamlit-operator.git",
-                "branch": "main",
-                "code_dir": "streamlit-hub",
-            },
-        },
-    )
+        )
+    except kubernetes.client.exceptions.ApiException as e:
+        if e.status == 409:
+            logging.info("Hub StreamlitApp already exists, skipping creation")
+        else:
+            raise
 
 
 @kopf.on.create('streamlit-apps')
